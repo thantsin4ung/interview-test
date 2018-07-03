@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+	<title>Invoice Edit</title>
+</h:head>
+<h:body>
+	<f:view>
+		<h:form>
+			<h1>
+				<h:outputText value="Create/Edit" />
+			</h1>
+			<p:panelGrid columns="2">
+				<p:outputLabel value="Invoice Name : " for="customer" />
+				<p:inputText id="customer" value="#{invoiceBean.invoice.customer}"
+					title="Customer" readonly="#{not invoiceBean.edit}" />
+			</p:panelGrid>
+
+			<h:form >
+				<h1>
+					<h:outputText value="New Invoice" />
+				</h1>
+				<ui:repeat var="item" value="#{invoiceBean.invoice.items}">
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Item" />
+						</f:facet>
+						<p:inputText value="#{item.item}"
+							readonly="#{not invoiceBean.edit}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Price" />
+						</f:facet>
+						<p:inputText value="#{item.unitPrice}"
+							readonly="#{not invoiceBean.edit}">
+							<f:ajax execute="@form" render="@form"></f:ajax>
+						</p:inputText>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Of Items" />
+						</f:facet>
+						<p:inputText value="#{item.ofItem}"
+							readonly="#{not invoiceBean.edit}">
+							<f:ajax execute="@form" render="@form"></f:ajax>
+						</p:inputText>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Total" />
+						</f:facet>
+						<p:inputText value="#{item.total}" disabled="true" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Action" />
+						</f:facet>
+						<p:commandButton value="Delete">
+							<f:ajax execute="@this" render="@form"
+								listener="#{invoiceBean.removeItem(item)}"></f:ajax>
+						</p:commandButton>
+					</p:column>
+					<br />
+
+
+
+				</ui:repeat>
+				<p:panelGrid rendered="#{invoiceBean.edit}">
+					<p:commandButton value="Add Item">
+						<f:ajax execute="@form" render="@form"
+							listener="#{invoiceBean.addItem()}"></f:ajax>
+					</p:commandButton>
+
+
+					<h:outputLabel value="SubTotal : " />
+					<p:outputLabel value="#{invoiceBean.invoice.subTotal}" />
+					<br/>
+
+					<p:outputLabel value="Tax : " />
+					<p:inputText value="#{invoiceBean.invoice.tax}" />
+					<br/>
+
+
+					<p:outputLabel value="Total : " />
+					<p:outputLabel value="#{invoiceBean.invoice.taxTotal}"
+						disabled="true" />
+
+					<br/>
+
+
+					<p:commandButton action="#{invoiceBean.save()}" value="Save" />
+
+				</p:panelGrid>
+			</h:form>
+
+
+
+
+
+
+		</h:form>
+	</f:view>
+
+	<h:form>
+		<p:panelGrid columns="2">
+
+		</p:panelGrid>
+	</h:form>
+
+
+</h:body>
+</html>
+
